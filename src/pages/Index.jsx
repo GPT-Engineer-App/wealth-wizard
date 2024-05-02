@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Container, Flex, FormControl, FormLabel, Input, Select, Text, useToast, VStack } from "@chakra-ui/react";
-import { FaUpload, FaChevronDown } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
 import AssetsLiabilitiesChart from "../components/AssetsLiabilitiesChart";
 import RevenueExpensesChart from "../components/RevenueExpensesChart";
 
 const Index = () => {
-  const selectRef = useRef(null);
   const [selectedBank, setSelectedBank] = useState([]);
   const [bankOptions, setBankOptions] = useState([]);
   const [showCharts, setShowCharts] = useState(false);
@@ -38,16 +37,13 @@ const Index = () => {
         <Box p={5} shadow="md" borderWidth="1px">
           <VStack spacing={4} align="flex-start">
             <Text fontSize="xl">Client Dashboard</Text>
-            <Select ref={selectRef} placeholder="Select banks" value={selectedBank} onChange={(e) => setSelectedBank([...e.target.selectedOptions].map((option) => option.value))} multiple>
+            <Select placeholder="Select banks" value={selectedBank} onChange={(e) => setSelectedBank([...e.target.selectedOptions].map((option) => option.value))} multiple>
               {bankOptions.map((bank) => (
                 <option key={bank} value={bank}>
                   {bank}
                 </option>
               ))}
             </Select>
-            <Button leftIcon={<FaChevronDown />} onClick={() => selectRef.current.focus()}>
-              Open Dropdown
-            </Button>
             <Button onClick={() => setShowCharts(true)}>Run</Button>
             <Button ml={4} onClick={() => setShowCharts(false)}>
               Refresh
