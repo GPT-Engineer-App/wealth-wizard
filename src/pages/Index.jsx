@@ -6,6 +6,7 @@ import RevenueExpensesChart from "../components/RevenueExpensesChart";
 
 const Index = () => {
   const [selectedBank, setSelectedBank] = useState("");
+  const [showCharts, setShowCharts] = useState(false);
   const toast = useToast();
 
   const handleFileUpload = (event) => {
@@ -36,8 +37,8 @@ const Index = () => {
               <option value="bank1">Bank 1</option>
               <option value="bank2">Bank 2</option>
             </Select>
-            {/* Placeholder for dynamic charts */}
-            {selectedBank && (
+            <Button onClick={() => setShowCharts(true)}>Run</Button>
+            {showCharts && selectedBank && (
               <>
                 <AssetsLiabilitiesChart bankId={selectedBank} />
                 <RevenueExpensesChart bankId={selectedBank} />
