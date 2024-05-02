@@ -51,10 +51,10 @@ const Index = () => {
             {showCharts &&
               selectedBank.length > 0 &&
               selectedBank.map((bankId) => (
-                <React.Fragment key={bankId}>
+                <VStack key={bankId} spacing={4}>
                   <AssetsLiabilitiesChart bankId={bankId} />
                   <RevenueExpensesChart bankId={bankId} />
-                </React.Fragment>
+                </VStack>
               ))}
           </VStack>
         </Box>
