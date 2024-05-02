@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Container, Flex, FormControl, FormLabel, Input, Select, Text, useToast, VStack } from "@chakra-ui/react";
-import { FaUpload, FaBank } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
+import AssetsLiabilitiesChart from "../components/AssetsLiabilitiesChart";
+import RevenueExpensesChart from "../components/RevenueExpensesChart";
 
 const Index = () => {
   const [selectedBank, setSelectedBank] = useState("");
@@ -35,7 +37,12 @@ const Index = () => {
               <option value="bank2">Bank 2</option>
             </Select>
             {/* Placeholder for dynamic charts */}
-            <Text>Data chart for {selectedBank}</Text>
+            {selectedBank && (
+              <>
+                <AssetsLiabilitiesChart bankId={selectedBank} />
+                <RevenueExpensesChart bankId={selectedBank} />
+              </>
+            )}
           </VStack>
         </Box>
 
