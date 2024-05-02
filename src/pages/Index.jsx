@@ -5,17 +5,21 @@ import AssetsLiabilitiesChart from "../components/AssetsLiabilitiesChart";
 import RevenueExpensesChart from "../components/RevenueExpensesChart";
 
 const Index = () => {
-  const [selectedBank, setSelectedBank] = useState("");
+  const [selectedBank, setSelectedBank] = useState([]);
+  const [bankOptions, setBankOptions] = useState([]);
   const [showCharts, setShowCharts] = useState(false);
   const toast = useToast();
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Here you would handle the file upload process, including validation and sending to the backend
+      const text = await file.text();
+      const rows = text.split("\n").map((row) => row.split(","));
+      const banks = [...new Set(rows.map((row) => row[0]))].filter((bank) => bank !== "bank_id");
+      setBankOptions(banks);
       toast({
-        title: "File uploaded.",
-        description: "Your file has been uploaded successfully.",
+        title: "File uploaded and processed.",
+        description: "Your file has been uploaded and banks have been updated.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -33,17 +37,25 @@ const Index = () => {
         <Box p={5} shadow="md" borderWidth="1px">
           <VStack spacing={4} align="flex-start">
             <Text fontSize="xl">Client Dashboard</Text>
-            <Select placeholder="Select bank" value={selectedBank} onChange={(e) => setSelectedBank(e.target.value)}>
-              <option value="bank1">Bank 1</option>
-              <option value="bank2">Bank 2</option>
+            <Select placeholder="Select banks" value={selectedBank} onChange={(e) => setSelectedBank([...e.target.selectedOptions].map((option) => option.value))} multiple>
+              {bankOptions.map((bank) => (
+                <option key={bank} value={bank}>
+                  {bank}
+                </option>
+              ))}
             </Select>
             <Button onClick={() => setShowCharts(true)}>Run</Button>
-            {showCharts && selectedBank && (
-              <>
-                <AssetsLiabilitiesChart bankId={selectedBank} />
-                <RevenueExpensesChart bankId={selectedBank} />
-              </>
-            )}
+            <Button ml={4} onClick={() => setShowCharts(false)}>
+              Refresh
+            </Button>
+            {showCharts &&
+              selectedBank.length > 0 &&
+              selectedBank.map((bankId) => (
+                <React.Fragment key={bankId}>
+                  <AssetsLiabilitiesChart bankId={bankId} />
+                  <RevenueExpensesChart bankId={bankId} />
+                </React.Fragment>
+              ))}
           </VStack>
         </Box>
 
